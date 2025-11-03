@@ -1,0 +1,41 @@
+<script setup lang="ts">
+import Inscription from '~/components/inscription.vue'
+
+const { loggedIn, session, fetch, clear } = useUserSession()
+const login = async () => {
+  await $fetch('/api/login')
+  await fetch()
+}
+const logout = async () => {
+  await $fetch('/api/logout')
+  await fetch()
+}
+</script>
+
+<template>
+  <UDashboardPanel :ui="{ body: 'overflow-y-scroll' }">
+    <template
+      v-if="true"
+      #header
+    >
+      <UDashboardNavbar>
+        <template #right>
+          <UColorModeSelect />
+        </template>
+      </UDashboardNavbar>
+    </template>
+
+    <template #body>
+      <ClientOnly>
+        <Inscription />
+      </ClientOnly>
+    </template>
+    <template #footer>
+      <UDashboardNavbar
+        :toggle="false"
+      >
+        <UIcon name="lucide-home" />
+      </UDashboardNavbar>
+    </template>
+  </UDashboardPanel>
+</template>

@@ -1,0 +1,13 @@
+{
+  "name": "alloe",
+  "compatibility_date": "2025-09-27",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "alloe",
+      "database_id": "268fa78f-f50a-4ea1-b052-60f1c3a8796a",
+      "migrations_dir": "drizzle/migrations",
+      "remote": true
+    }
+  ],
+}

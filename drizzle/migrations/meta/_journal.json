@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1760561583949,
+      "tag": "0000_lowly_dakota_north",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1761871713981,
+      "tag": "0001_tiresome_galactus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1761872370929,
+      "tag": "0002_lovely_ironclad",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1761876151487,
+      "tag": "0003_steep_silver_surfer",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1761876199163,
+      "tag": "0004_greedy_gladiator",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1761876238163,
+      "tag": "0005_yummy_robin_chapel",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1761876260497,
+      "tag": "0006_blushing_master_mold",
+      "breakpoints": true
+    }
+  ]
+}

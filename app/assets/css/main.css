@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@source "../../../content/**/*.{md,yml}";
+
+
+@theme static {
+  --animate-wiggle: wiggle 1s ease-in-out;
+  @keyframes wiggle {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+@theme {
+  --font-sans: 'Nunito', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  --ui-bg: var(--ui-color-neutral-50);
+}
+
+.dark {
+  --ui-bg: var(--ui-color-neutral-900);
+}
