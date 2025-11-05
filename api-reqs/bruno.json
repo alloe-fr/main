@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "api-reqs",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

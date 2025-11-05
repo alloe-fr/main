@@ -16,14 +16,22 @@ const state = reactive<Partial<Schema>>({
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  await $fetch('/api/login', {
-    method: 'POST',
-    body: {
-      email: event.data.email,
-      password: event.data.password,
-    },
-  })
+  try {
+    const res = await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: {
+        email: event.data.email,
+        password: event.data.password,
+      },
+    })
+    await useUserSession().fetch()
+  }
+  catch (error) {
+    console.error('erreur', error)
+  }
 }
+
+// TODO : gérer la dualité pseudo OU email pour le login
 </script>
 
 <template>
@@ -34,8 +42,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     @submit="onSubmit"
   >
     <UFormField
-      label="Email"
+      label="Email ou nom d'utilisateur"
       name="email"
+      autocomplete="email"
     >
       <UInput v-model="state.email" />
     </UFormField>

@@ -1,19 +1,20 @@
 import { z } from 'zod';
 import { eq, lt, gte, ne, or } from 'drizzle-orm';
+import { invalidInput, internal } from '~~/server/utils/httpErrors';
 
 export default defineEventHandler(async (event) => {
     try {
         const schema = z
             .object({
-                email: z.string().email("Le format de l'email est invalide").optional(),
-                name: z.string().min(1, "Le nom est requis").optional(),
-                password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
+                email: z.email("Le format de l'email est invalide").optional(),
+                name: z.string().min(3, "Le nom est requis").optional(),
+                password: z.string("Le mot de passe est requis").min(8, "Le mot de passe doit contenir au moins 8 caractères"),
             })
             .refine(
                 (data) => data.email || data.name, // au moins un des deux
                 {
                     message: "Vous devez renseigner un email ou un nom d'utilisateur",
-                    path: ['email'], // tu peux choisir où placer l'erreur
+                    path: ['email'],
                 }
             )
 
@@ -29,8 +30,8 @@ export default defineEventHandler(async (event) => {
 
         if (!result) {
             throw createError({
-                statusCode: 404,
-                message: 'User not found',
+                statusCode: 401,
+                statusMessage: 'Erreur : utilisateur introuvable.',
             });
         }
         if (await verifyPassword(result.password, body.password)) {
@@ -38,22 +39,18 @@ export default defineEventHandler(async (event) => {
                 user: {
                     login: result.name,
                 },
-                // Private data accessible only on server/ routes
                 secure: {
                     id: result.id,
                     email: result.email,
                 },
             });
-            return sendRedirect(event, '/');
-        }
+        } else throw createError({
+            statusCode: 401,
+            statusMessage: 'Erreur : mot de passe incorrect.',
+        });
     } catch (error) {
-        // Erreur de validation Zod
         if (error instanceof z.ZodError) {
-            throw createError({
-                statusCode: 400,
-                message: 'Invalid input',
-                data: error.issues,
-            });
+            throw invalidInput(error.issues);
         }
 
         if (error && typeof error === 'object' && 'statusCode' in error) {
@@ -62,9 +59,6 @@ export default defineEventHandler(async (event) => {
 
         // Erreur générique
         console.error('Unexpected error:', error);
-        throw createError({
-            statusCode: 500,
-            message: 'Failed to create user',
-        });
+        throw internal();
     }
 });

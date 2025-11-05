@@ -17,6 +17,7 @@
     "@nuxt/eslint": "1.10.0",
     "@nuxt/ui": "4.1.0",
     "@paralleldrive/cuid2": "^3.0.4",
+    "better-sqlite3": "^12.4.1",
     "drizzle-kit": "^0.31.5",
     "drizzle-orm": "^0.44.6",
     "eslint": "^9.38.0",

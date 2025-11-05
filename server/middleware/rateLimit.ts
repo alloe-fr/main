@@ -1,44 +1,39 @@
-// Rate limiting pour éviter les attaques par force brute
-const loginAttempts = new Map<string, { count: number; resetAt: number }>()
+// Rate limiting pour éviter les attaques par force brute sur les endpoints d'auth
+import { tooManyRequests } from '../utils/httpErrors'
+
+type Bucket = { count: number; resetAt: number }
+const buckets = new Map<string, Bucket>()
 
 export default defineEventHandler(async (event) => {
     const path = event.path
+    const method = getMethod(event)
 
-    // Appliquer uniquement sur /api/login
-    if (!path.includes('/api/login')) {
-        return
-    }
+    // Appliquer sur POST /api/auth/login et POST /api/auth/register
+    const isLogin = method === 'POST' && path.includes('/api/auth/login')
+    const isRegister = method === 'POST' && path.includes('/api/auth/register')
+    if (!isLogin && !isRegister) return
 
     const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown'
     const now = Date.now()
-    const maxAttempts = 5
     const windowMs = 15 * 60 * 1000 // 15 minutes
+    const maxAttempts = 5
 
-    const attempt = loginAttempts.get(ip)
+    const key = `${ip}:${isLogin ? 'login' : 'register'}`
+    const entry = buckets.get(key)
 
-    if (attempt) {
-        if (now < attempt.resetAt) {
-            if (attempt.count >= maxAttempts) {
-                throw createError({
-                    statusCode: 429,
-                    statusMessage: 'Too many login attempts. Please try again later.'
-                })
-            }
-            attempt.count++
-        } else {
-            // Reset window
-            loginAttempts.set(ip, { count: 1, resetAt: now + windowMs })
+    if (entry && now < entry.resetAt) {
+        if (entry.count >= maxAttempts) {
+            throw tooManyRequests()
         }
+        entry.count++
     } else {
-        loginAttempts.set(ip, { count: 1, resetAt: now + windowMs })
+        buckets.set(key, { count: 1, resetAt: now + windowMs })
     }
 
-    // Nettoyage périodique
+    // Nettoyage périodique (très léger)
     if (Math.random() < 0.01) {
-        for (const [key, value] of loginAttempts.entries()) {
-            if (now > value.resetAt) {
-                loginAttempts.delete(key)
-            }
+        for (const [k, v] of buckets.entries()) {
+            if (now > v.resetAt) buckets.delete(k)
         }
     }
 })

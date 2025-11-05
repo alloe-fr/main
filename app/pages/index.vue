@@ -2,14 +2,12 @@
 import Inscription from '~/components/inscription.vue'
 
 const { loggedIn, session, fetch, clear } = useUserSession()
-const login = async () => {
-  await $fetch('/api/login')
-  await fetch()
-}
+
 const logout = async () => {
-  await $fetch('/api/logout')
+  await $fetch('/api/auth/logout')
   await fetch()
 }
+
 </script>
 
 <template>
