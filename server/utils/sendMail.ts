@@ -20,7 +20,7 @@ export async function sendMail({
     })
     return data
   } catch (err) {
-    console.error('Erreur lors de l’envoi de l’email :', err)
+    console.error('Erreur lors de l\'envoi de l\'email :', err)
     throw err
   }
 }

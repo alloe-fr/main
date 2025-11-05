@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
                     email: result.email,
                 },
             });
-            return { ok: 'ok' };
+            return sendRedirect(event, '/');
         }
     } catch (error) {
         // Erreur de validation Zod

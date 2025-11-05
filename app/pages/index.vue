@@ -28,6 +28,12 @@ const logout = async () => {
     <template #body>
       <ClientOnly>
         <Inscription />
+        <Login />
+        {{ loggedIn }}
+        <pre>{{ session }}</pre>
+        <UButton @click="logout">
+          Logout
+        </UButton>
       </ClientOnly>
     </template>
     <template #footer>
