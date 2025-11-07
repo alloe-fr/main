@@ -11,5 +11,15 @@ export const users = sqliteTable('users', {
   email: text('email').notNull().unique(),
   name: text('name').notNull().unique(),
   password: text('password').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$default(() => new Date()),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).default(false),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' }).$default(() => new Date()),
+});
+
+export const emailVerificationTokens = sqliteTable('email_verification_tokens', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id),
+  tokenHash: text('token_hash').notNull().unique(), // SHA-256 hex
+  expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
+  usedAt: integer('used_at', { mode: 'timestamp_ms' }),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull().$default(() => new Date()),
 });

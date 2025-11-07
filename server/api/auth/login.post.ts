@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
         if (await verifyPassword(result.password, body.password)) {
             await replaceUserSession(event, {
                 user: {
-                    login: result.name,
+                    name: result.name,
                 },
                 secure: {
                     id: result.id,

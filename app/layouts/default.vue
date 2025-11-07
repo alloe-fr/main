@@ -25,6 +25,8 @@ const items = [[{
   to: 'https://github.com/nuxt/ui',
   target: '_blank',
 }]]
+
+const { user } = useUserSession()
 </script>
 
 <template>
@@ -32,6 +34,7 @@ const items = [[{
     <UDashboardSidebar
       collapsible
       resizable
+      :ui="{ footer: 'border-t border-default' }"
     >
       <template #header>
         <UIcon
@@ -39,16 +42,22 @@ const items = [[{
           size="2rem"
         />
       </template>
-      <template #default>
-        blabla
-        <UNavigationMenu
-          :items="items[0]"
-          orientation="vertical"
-        />
-        <UNavigationMenu
-          :items="items[1]"
-          orientation="vertical"
-          class="mt-auto"
+      <UNavigationMenu
+        :items="items[0]"
+        orientation="vertical"
+      />
+      <UNavigationMenu
+        :items="items[1]"
+        orientation="vertical"
+        class="mt-auto"
+      />
+      <template #footer>
+        <UUser
+          v-if="user"
+          v-bind="user"
+          :avatar="{
+            icon: 'i-lucide-user',
+          }"
         />
       </template>
     </UDashboardSidebar>

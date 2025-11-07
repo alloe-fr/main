@@ -7,7 +7,6 @@ const logout = async () => {
   await $fetch('/api/auth/logout')
   await fetch()
 }
-
 </script>
 
 <template>

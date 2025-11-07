@@ -14,10 +14,9 @@ const state = reactive<Partial<Schema>>({
   password: undefined,
 })
 
-const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
-    const res = await $fetch('/api/auth/login', {
+    await $fetch('/api/auth/login', {
       method: 'POST',
       body: {
         email: event.data.email,
